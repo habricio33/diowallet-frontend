@@ -1,18 +1,7 @@
-import { useState } from 'react'
-import './App.css' 
-import Signin from './pages/Signin'
+import { Outlet } from "react-router-dom"
 
-function App() {
-  
-
-  return (
-    <>
-      <div className="min-h-screen flex items-center justify-center">
-       <Signin /> 
-       
-    </div>
-    </>
-  )
+function App() { 
+  return <Outlet />
 }
 
 export default App
