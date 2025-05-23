@@ -3,9 +3,7 @@
 @tailwind utilities;
 
 
-body, 
-button[type="submit"], 
-button {
+body{ 
   background: linear-gradient(
     130deg,
     rgba(52, 166, 221, 1) 0%,
