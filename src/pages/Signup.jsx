@@ -3,8 +3,35 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import { BiArrowBack } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import  ErrorInput from "../components/ErrorInput";
+import { signupSchema } from "../schemas/SignupSchema.js";
+import { signup } from "../services/user.js";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Signup() {   
+
+    const {
+        register, 
+        handleSubmit,  
+        formState: { errors } 
+    } = useForm({ resolver: zodResolver(signupSchema) });
+    
+    const navigate = useNavigate();
+
+    async function handleSubmitForm(data) {      
+      try {
+         await signup(data);
+         navigate("/signin");
+
+      } catch (error) {
+        console.log(error.message);
+        alert(error.message)
+      }
+
+    }
     
     return (
       
@@ -17,11 +44,16 @@ export default function Signup() {
 
                 <img src={logoDio} alt="" className="w-44 m-8" />
                 <h1 className="text-white font-bold text-5xl py-5">Register</h1>
-                <form className="flex flex-col justify-center gap-4 w-full text-2xl">
-                    <Input type="text" placeholder="Full Name" />                      
-                    <Input type="email" placeholder="Email" />  
-                    <Input type="password" placeholder="Password" />
-                    <Input type="password" placeholder="Confirm Password" />               
+
+                <form onSubmit={handleSubmit(handleSubmitForm)} className="flex flex-col justify-center gap-4 w-full text-2xl">
+                    <Input type="text" placeholder="Full Name" register={register} name="name" />    
+                    {errors.fullName &&  <ErrorInput text={errors.fullName?.message} />}
+                    <Input type="email" placeholder="Email" register={register} name="email" />  
+                     {errors.email &&  <ErrorInput text={errors.email?.message} />}
+                    <Input type="password" placeholder="Password" register={register} name="password" />
+                     {errors.password &&  <ErrorInput text={errors.password?.message} />}
+                    <Input type="password" placeholder="Confirm Password" register={register} name="confirmPassword" />               
+                      {errors.confirmPassword &&  <ErrorInput text={errors.confirmPassword?.message} />}
                     <Button type="submit" text="SIGNUP" />     
                       
                 </form>
